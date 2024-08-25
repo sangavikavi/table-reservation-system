@@ -3,12 +3,14 @@ package com.albeisoft.hotelbooking.controllers;
 import com.albeisoft.hotelbooking.models.Category;
 import com.albeisoft.hotelbooking.models.Client;
 import com.albeisoft.hotelbooking.services.ClientService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController

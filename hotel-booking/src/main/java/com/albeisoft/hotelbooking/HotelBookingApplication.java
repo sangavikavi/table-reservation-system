@@ -1,6 +1,6 @@
 package com.albeisoft.hotelbooking;
 
-import com.albeisoft.hotelbooking.models.User;
+import com.albeisoft.hotelbooking.models.AuthUser;
 import com.albeisoft.hotelbooking.models.UserRole;
 import com.albeisoft.hotelbooking.services.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -32,8 +32,8 @@ public class HotelBookingApplication {
 			userService.saveUserRole(new UserRole(null,"ROLE_ADMIN"));
 			userService.saveUserRole(new UserRole(null,"ROLE_SUPER_ADMIN"));
 
-			userService.saveUser(new User(null,"Admin Admin","admin","123456", new ArrayList<>()));
-			userService.saveUser(new User(null,"John Daniel","john","123456", new ArrayList<>()));
+			userService.saveUser(new AuthUser(null,"Admin Admin","admin","123456", new ArrayList<>()));
+			userService.saveUser(new AuthUser(null,"John Daniel","john","123456", new ArrayList<>()));
 
 			userService.addUserRoleToUser("admin","ROLE_USER");
 			userService.addUserRoleToUser("admin","ROLE_MANAGER");

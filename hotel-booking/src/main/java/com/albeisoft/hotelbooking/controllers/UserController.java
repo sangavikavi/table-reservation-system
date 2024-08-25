@@ -1,6 +1,6 @@
 package com.albeisoft.hotelbooking.controllers;
 
-import com.albeisoft.hotelbooking.models.User;
+import com.albeisoft.hotelbooking.models.AuthUser;
 import com.albeisoft.hotelbooking.models.UserRole;
 import com.albeisoft.hotelbooking.services.UserService;
 import com.auth0.jwt.JWT;
@@ -8,6 +8,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -43,12 +45,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<AuthUser>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
+    public ResponseEntity<AuthUser> saveUser(@Valid @RequestBody AuthUser user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
         if (userService.getUser(user.getUserName()) != null)
         {
@@ -82,7 +84,7 @@ public class UserController {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
+                AuthUser user = userService.getUser(username);
                 String accessToken = JWT.create()
                         .withSubject(user.getUserName())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))

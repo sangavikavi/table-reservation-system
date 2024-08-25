@@ -1,6 +1,6 @@
 package com.albeisoft.hotelbooking.services;
 
-import com.albeisoft.hotelbooking.models.User;
+import com.albeisoft.hotelbooking.models.AuthUser;
 import com.albeisoft.hotelbooking.models.UserRole;
 import com.albeisoft.hotelbooking.repositories.UserRepository;
 import com.albeisoft.hotelbooking.repositories.UserRoleRepository;
@@ -29,7 +29,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(userName);
+        AuthUser user = userRepository.findByUserName(userName);
         if (user == null) {
             log.error("User not found.");
             throw new UsernameNotFoundException("User not found.");
@@ -45,7 +45,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), authorities);
     }
     @Override
-    public User saveUser(User user) {
+    public AuthUser saveUser(AuthUser user) {
         log.info("Saving new user {} to database.", user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -61,19 +61,19 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
     @Override
     public void addUserRoleToUser(String userName, String roleName) {
         log.info("Adding role {} to user {}.", roleName, userName);
-        User user = userRepository.findByUserName(userName);
+        AuthUser user = userRepository.findByUserName(userName);
         UserRole userRole = userRoleRepository.findByName(roleName);
         user.getUserRoles().add(userRole);
     }
 
     @Override
-    public User getUser(String userName) {
+    public AuthUser getUser(String userName) {
         log.info("Fetching user {}.", userName);
         return userRepository.findByUserName(userName);
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<AuthUser> getUsers() {
         log.info("Fetching all users.");
         return userRepository.findAll();
     }
